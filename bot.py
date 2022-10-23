@@ -39,11 +39,15 @@ async def forms_start(msg):
 @bot.message_handler(commands=['save'])
 async def save_form(msg):
     r = requests.get(url=f"https://miet-hack-api.herokuapp.com/get-session/{msg.chat.id}")
-    print(r.text)
     data = r.json()
-    print("hey")
+
+    data.pop('status')
+    print(data)
+    data['user'] = msg.chat.id
+    data['name'] = 'Dorogi'
     r = requests.post(url="https://miet-hack-api.herokuapp.com/save-answer", data=data)
-    response = r.json()['status']
+    response = r.status_code
+    print(response)
     match response:
         #успешно
         case 201:
